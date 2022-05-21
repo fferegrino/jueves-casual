@@ -1,10 +1,11 @@
 from PIL import Image
 import numpy as np
-from blend_modes import divide, overlay, multiply, darken_only,normal
+from blend_modes import divide, overlay, multiply, darken_only,normal, dodge
 import requests
 from io import BytesIO
 import streamlit as st
 from traitlets import default
+import math
 
 
 doll = Image.open("doll.png")
@@ -17,12 +18,17 @@ url = st.text_input('Base image', placeholder='https://...', value='https://imag
 response = requests.get(url)
 bg = Image.open(BytesIO(response.content)).convert("RGBA")
 
+desired_width = 1920
+desired_height = 1080
 
+ratio = desired_width / bg.size[0]
 
-thumbnail = 1920,1080
-crop = (0,0,*thumbnail)
-bg= bg.crop(crop)
+width = int(math.ceil(bg.size[0]*ratio))
+height = int(max(bg.size[1] * ratio, 1080))
 
+resized = bg.resize((width, height))
+crop_loc = (height / 2) - (desired_height / 2)
+bg = resized.crop((0, crop_loc, desired_width, crop_loc + desired_height))
 
 def tf(img):
     foreground_img = np.array(img)  # Inputs to blend_modes need to be numpy arrays.
