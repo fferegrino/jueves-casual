@@ -16,7 +16,7 @@ vingette = Image.open("vingette.png").convert("RGBA")
 stroke = Image.open("stroke.png")
 
 url = st.text_input(
-    "Base image", placeholder="https://...", value="https://images.unsplash.com/photo-1638913970961-1946e5ee65c4"
+    "Base image", placeholder="https://...", value="https://unsplash.com/photos/LIVKWK28Ahg"
 )
 
 urls_sizes = ["raw", "full", "regular", "small", "thumb"]
